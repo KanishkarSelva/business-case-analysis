@@ -84,3 +84,54 @@ ORDER BY number_of_customers DESC
 - Localized Offerings: Tailor product offerings and marketing messages to the specific preferences and needs of customers in top cities and states. For regions with emerging customer bases, conduct market research to understand local preferences and customize offerings accordingly.
 - Infrastructure Investments: For areas with significant customer activity, consider investing in infrastructure, such as warehouses or distribution centers, to improve delivery times and reduce shipping costs.
 ---
+
+## 2.1.Is there a growing trend in the no. of orders placed over the past years?
+
+## Query
+
+```sql
+SELECT 
+
+`  `EXTRACT(YEAR FROM order\_purchase\_timestamp) AS order\_year,
+
+`  `COUNT(order\_id) AS total\_orders
+
+FROM `ecom.orders`
+
+GROUP BY order\_year
+
+ORDER BY order\_year
+
+## Screenshot
+
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.004.png)
+```
+
+## Insights
+
+From this above image we can understand that the number of order placed over past years is increased.
+
+- The reason of low total orders in 2016 is because the data is available only for September and October month. This might be less data acquired.
+
+- The results indicate a substantial growth in the number of orders placed over the past years:
+
+- In 2016, there were 329 orders, which can be considered a starting or pilot phase.
+
+- In 2017, the number of orders increased dramatically to 45,101. This represents an increase of more than 100 times the previous year, signaling a significant uptake in the company's market presence or consumer adoption of the service.
+
+- In 2018, the growth continued, with the total orders reaching 54,011. This is an increase of approximately 20% from 2017.
+
+
+## Recommendations
+
+- Investigate Underlying Factors: Analyze the factors contributing to this growth. This could include marketing campaigns, expansion into new markets, improvements to the online platform, or broader economic factors.
+
+- Sustain Growth: Identify the successful strategies that have driven this growth and consider how to sustain or enhance them. This might include scaling up marketing, improving logistics and supply chain management, or expanding product ranges.
+
+- Infrastructure Scalability: Ensure that the company's infrastructure, both technical and logistical, can handle further increases in order volume. It's essential to scale operations to avoid potential bottlenecks as the company grows.
+
+- Customer Experience Focus: With the increase in order volume, maintain a focus on customer service quality. Growth should not come at the expense of customer satisfaction.
+
+
+
+
