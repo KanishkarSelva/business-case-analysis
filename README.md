@@ -20,14 +20,14 @@ FROM `ecom.INFORMATION_SCHEMA.COLUMNS`
 WHERE table_name = 'customers'
 ```
 
-## Screenshot
+### Screenshot
 
 ![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.001.png)
 
-## Insights
+### Insights
 - The query reveals the data structure of the customers table, highlighting that it comprises columns with data types of both String and Int64. Understanding the data types is crucial for data integrity and query optimization. For instance, knowing that customer_id is an Int64 assures us it can handle large numeric values efficiently, while customer_name being a String indicates it's designed to store textual data, which is essential for personalization and identification.
 
-## Recommendations
+### Recommendations
 - Data Type Consistency: Ensure consistency in the data types used across the database to prevent type mismatch errors. For instance, if customer_id references another table, both should be of type Int64.
 - Query Optimization: Use the knowledge of data types to optimize queries. Knowing a column is an Int64 allows for numerical operations and optimizations, while String operations might require different indexing strategies.
 - Data Validation: Implement robust data validation rules, especially for String fields, to maintain data quality. For example, setting maximum lengths on String fields can help avoid data truncation errors.
@@ -42,14 +42,14 @@ WHERE table_name = 'customers'
 SELECT MIN(order_purchase_timestamp) AS earliest_order_time, MAX(order_purchase_timestamp) AS latest_order_time
 FROM `ecom.orders`
 ```
-## Screenshot
+### Screenshot
 
 ![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.002.png)
 
-## Insights
+### Insights
 - This query identifies the time range within which all orders in the dataset were placed, from the earliest to the latest. Specifically, the orders span from 2016-09-04 21:15:19 UTC to 2018-10-17 17:30:18 UTC. This time frame is critical for understanding the period under analysis, allowing for temporal insights into customer behavior, order volume trends, and seasonal impacts on sales.
 
-## Recommendations
+### Recommendations
 - Temporal Analysis for Business Insights: Use this time range to conduct further temporal analyses, such as identifying peak sales periods, understanding seasonal variations in order volume, and correlating sales data with marketing campaigns or major events within the same timeframe.
 - Data Completeness Verification: Verify that the data set completeness aligns with this time range. If there are missing dates or discrepancies, it might indicate data integrity issues or gaps in the data collection process.
 - Strategic Planning and Forecasting: Leverage the identified time range for strategic planning, including stock management, marketing campaigns, and resource allocation. Understanding the timeline can help predict future trends based on past patterns.
@@ -71,14 +71,14 @@ GROUP BY c.customer_city, c.customer_state
 ORDER BY number_of_customers DESC
 ```
 
-## Screenshot
+### Screenshot
 
 ![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.003.bmp)
 
-## Insights
+### Insights
 - This query provides a geographical breakdown of the customer base, revealing significant concentrations in specific cities and states. The data indicates that customers from "Sao Paulo" city, in "Sao Paulo" state, have the highest number of orders, significantly outpacing other regions. This suggests a strong market presence in Sao Paulo, potentially due to its large population and economic status. The disparity between "Sao Paulo" and other cities like "Rio de Janeiro" underscores varying market penetrations across different regions.
 
-## Recommendations
+### Recommendations
 - Market Focus: Given the high concentration of customers in "Sao Paulo", it may be beneficial to focus marketing and sales efforts in this area to further capitalize on the existing customer base. This could include localized advertising campaigns, opening new stores, or enhancing delivery logistics for faster service.
 - Expansion Opportunities: While "Sao Paulo" shows strong sales, there's potential for growth in other cities and states with fewer customers. Identifying reasons for lower penetration in these areas—be it lack of awareness, preference for competitors, or logistical challenges—can guide strategic expansions.
 - Localized Offerings: Tailor product offerings and marketing messages to the specific preferences and needs of customers in top cities and states. For regions with emerging customer bases, conduct market research to understand local preferences and customize offerings accordingly.
@@ -98,12 +98,12 @@ GROUP BY order_year
 ORDER BY order_year
 ```
 
-## Screenshot
+### Screenshot
 
 ![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.004.png)
 
 
-## Insights
+### Insights
 
 From this above image we can understand that the number of order placed over past years is increased.
 
@@ -118,7 +118,7 @@ From this above image we can understand that the number of order placed over pas
 - In 2018, the growth continued, with the total orders reaching 54,011. This is an increase of approximately 20% from 2017.
 
 
-## Recommendations
+### Recommendations
 
 - Investigate Underlying Factors: Analyze the factors contributing to this growth. This could include marketing campaigns, expansion into new markets, improvements to the online platform, or broader economic factors.
 
@@ -144,12 +144,12 @@ GROUP BY order_year, order_month
 ORDER BY order_year, order_month
 
 ```
- ## Screenshot
+ ### Screenshot
 
 ![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.005.png)
 
 
-## Insights:
+### Insights:
 
 - Initial Growth: Starting with just a few orders in September 2016, there is a rapid increase in the number of orders placed, reaching a peak in November 2017 with 7544 orders. This growth could be associated with an increased market presence, marketing campaigns, seasonal sales, or expanding product lines.
 
@@ -161,7 +161,7 @@ ORDER BY order_year, order_month
 
 - Sharp Drop:  There is a significant drop in September 2018, which deviates from the previous trend and continues to remain very low into October 2018. This is an anomaly that needs to be investigated.
 
-## Recommendation:
+### Recommendation:
 
 - Investigate Anomalies: Look into the sharp decline in orders in September and October 2018 to understand whether it was due to external factors, operational issues, changes in consumer behavior, or data recording errors.
 
@@ -174,3 +174,88 @@ ORDER BY order_year, order_month
 - Long-Term Data Tracking: Continue to collect and analyze data beyond October 2018 to confirm these seasonal trends and adjust strategies accordingly.
 
 ---
+
+## Q2.3: During What Time of the Day Do the Brazilian Customers Mostly Place Their Orders? (Dawn, Morning, Afternoon, or Night)
+
+### Query
+
+```sql
+SELECT 
+  CASE
+    WHEN EXTRACT(HOUR FROM order_purchase_timestamp) BETWEEN 0 AND 6 THEN 'Dawn'
+    WHEN EXTRACT(HOUR FROM order_purchase_timestamp) BETWEEN 7 AND 12 THEN 'Morning'
+    WHEN EXTRACT(HOUR FROM order_purchase_timestamp) BETWEEN 13 AND 18 THEN 'Afternoon'
+    WHEN EXTRACT(HOUR FROM order_purchase_timestamp) BETWEEN 19 AND 23 THEN 'Night'
+  END AS time_of_day, 
+  COUNT(order_id) AS total_orders
+FROM `ecom.orders`
+GROUP BY time_of_day
+ORDER BY total_orders DESC
+```
+
+### Screenshot
+
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.006.png)
+
+
+### Insights
+
+The query delineates customer order patterns across different times of the day, revealing:
+
+- A predominant preference for placing orders in the **Afternoon** (13-18 hrs), followed by **Night** (19-23 hrs), which indicates that customers are more inclined to shop online later in the day.
+- **Morning** (7-12 hrs) also sees a significant number of orders, suggesting that a notable portion of customers prefers to shop after the start of their day.
+- The least amount of activity occurs during **Dawn** (0-6 hrs), which is expected as this is typically when most individuals are asleep or not active online.
+
+### Recommendations
+
+- **Afternoon and Night Promotions**: Given the high activity during these times, consider running flash sales or special promotions to capture the attention of customers already online.
+  
+- **Enhance Customer Support**: Ensure that customer support is more readily available during peak shopping hours to assist with any inquiries or issues, enhancing the shopping experience.
+  
+- **Morning Engagement**: For the morning shoppers, targeted marketing emails or notifications could be sent out early in the day to capture their interest and encourage purchases.
+  
+- **Optimize for Mobile Shopping**: With a significant amount of shopping occurring in the afternoon and evening, ensure the mobile shopping experience is seamless, as customers might be using their phones to shop during these times.
+  
+- **Experiment with Dawn Offers**: Though it's the least active time, experimenting with early bird specials might capture a niche market of early risers or those looking to make purchases before their day starts.
+
+---
+
+## Q3.1: Get the Month on Month No. of Orders Placed in Each State
+
+### Query
+
+```sql
+SELECT 
+  c.customer_state AS state,
+  EXTRACT(YEAR FROM o.order_purchase_timestamp) AS order_year,
+  EXTRACT(MONTH FROM o.order_purchase_timestamp) AS order_month,
+  COUNT(o.order_id) AS total_orders
+FROM `ecom.customers` AS c
+JOIN `ecom.orders` AS o ON c.customer_id = o.customer_id
+GROUP BY state, order_year, order_month
+ORDER BY state, order_year, order_month
+```
+
+### Screenshot
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.007.bmp)
+
+
+### Insights
+
+The analysis of monthly orders by state offers valuable insights into market dynamics and customer behavior across regions:
+
+- **Growth Trends**: A general upward trend in the number of orders across most states indicates expanding market penetration and an increasing customer base, particularly notable in major states such as SP (São Paulo), RJ (Rio de Janeiro), and MG (Minas Gerais).
+  
+- **Seasonal Peaks**: A pronounced increase in orders during November across several states suggests a strong response to holiday sales events like Black Friday, highlighting the effectiveness of sales promotions during this period.
+  
+- **Regional Variances**: The data reveals significant variances in growth rates and order volumes between states, underlining the diverse market dynamics at play. States like SP show the highest volume of orders, underscoring its economic significance, while less populous states like AC (Acre) and AP (Amapá) exhibit lower order volumes but with potential for growth.
+
+### Recommendations
+
+- **Localized Marketing Strategies**: Develop tailored marketing campaigns that cater to the unique preferences and trends of each state. This could involve localized promotions, partnerships, or events designed to resonate with the specific customer base.
+  
+- **Infrastructure and Logistics Optimization**: For states showing significant growth or high order volumes, consider investing in logistics and infrastructure improvements to facilitate quicker deliveries and enhance customer satisfaction.
+  
+- **Focus on Emerging Markets**: Identify and target potential growth opportunities in states with emerging customer bases. Strategies could include market research to understand local needs, promotional campaigns to raise brand awareness, and exploring partnerships with local businesses to expand reach.
+  
+- **Seasonal Promotion Planning**: Capitalize on the observed spikes in order volumes during key shopping seasons by planning targeted sales and marketing efforts well in advance. Ensure inventory levels are adequately managed to meet the anticipated demand.
