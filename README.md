@@ -20,9 +20,9 @@ FROM `ecom.INFORMATION_SCHEMA.COLUMNS`
 WHERE table_name = 'customers'
 ```
 
-**Screenshot**
+## Screenshot
 
-![](Images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.001.png)
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.001.png)
 
 ## Insights
 - The query reveals the data structure of the customers table, highlighting that it comprises columns with data types of both String and Int64. Understanding the data types is crucial for data integrity and query optimization. For instance, knowing that customer_id is an Int64 assures us it can handle large numeric values efficiently, while customer_name being a String indicates it's designed to store textual data, which is essential for personalization and identification.
@@ -42,9 +42,9 @@ WHERE table_name = 'customers'
 SELECT MIN(order_purchase_timestamp) AS earliest_order_time, MAX(order_purchase_timestamp) AS latest_order_time
 FROM `ecom.orders`
 ```
-**Screenshot**
+## Screenshot
 
-![](Images.Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.002.png)
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.002.png)
 
 ## Insights
 - This query identifies the time range within which all orders in the dataset were placed, from the earliest to the latest. Specifically, the orders span from 2016-09-04 21:15:19 UTC to 2018-10-17 17:30:18 UTC. This time frame is critical for understanding the period under analysis, allowing for temporal insights into customer behavior, order volume trends, and seasonal impacts on sales.
@@ -53,3 +53,34 @@ FROM `ecom.orders`
 - Temporal Analysis for Business Insights: Use this time range to conduct further temporal analyses, such as identifying peak sales periods, understanding seasonal variations in order volume, and correlating sales data with marketing campaigns or major events within the same timeframe.
 - Data Completeness Verification: Verify that the data set completeness aligns with this time range. If there are missing dates or discrepancies, it might indicate data integrity issues or gaps in the data collection process.
 - Strategic Planning and Forecasting: Leverage the identified time range for strategic planning, including stock management, marketing campaigns, and resource allocation. Understanding the timeline can help predict future trends based on past patterns.
+
+---
+
+## Q1.3: Count the Cities & States of Customers Who Ordered During the Given Period
+
+### Query
+
+```sql
+SELECT 
+  c.customer_city, 
+  c.customer_state, 
+  COUNT(DISTINCT c.customer_id) AS number_of_customers
+FROM `ecom.customers` AS c
+JOIN `ecom.orders` AS o ON c.customer_id = o.customer_id
+GROUP BY c.customer_city, c.customer_state
+ORDER BY number_of_customers DESC
+```
+
+## Screenshot
+
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.003.bmp)
+
+## Insights
+- This query provides a geographical breakdown of the customer base, revealing significant concentrations in specific cities and states. The data indicates that customers from "Sao Paulo" city, in "Sao Paulo" state, have the highest number of orders, significantly outpacing other regions. This suggests a strong market presence in Sao Paulo, potentially due to its large population and economic status. The disparity between "Sao Paulo" and other cities like "Rio de Janeiro" underscores varying market penetrations across different regions.
+
+## Recommendations
+- Market Focus: Given the high concentration of customers in "Sao Paulo", it may be beneficial to focus marketing and sales efforts in this area to further capitalize on the existing customer base. This could include localized advertising campaigns, opening new stores, or enhancing delivery logistics for faster service.
+- Expansion Opportunities: While "Sao Paulo" shows strong sales, there's potential for growth in other cities and states with fewer customers. Identifying reasons for lower penetration in these areas—be it lack of awareness, preference for competitors, or logistical challenges—can guide strategic expansions.
+- Localized Offerings: Tailor product offerings and marketing messages to the specific preferences and needs of customers in top cities and states. For regions with emerging customer bases, conduct market research to understand local preferences and customize offerings accordingly.
+- Infrastructure Investments: For areas with significant customer activity, consider investing in infrastructure, such as warehouses or distribution centers, to improve delivery times and reduce shipping costs.
+---
