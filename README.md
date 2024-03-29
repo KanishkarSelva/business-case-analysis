@@ -717,7 +717,7 @@ ORDER BY
 ```
 
 
-### ScreenShot## 
+### ScreenShot
 
 ![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.018.bmp)
 
@@ -733,7 +733,7 @@ Decline as Installments Increase: There is a clear decline in the number of orde
 
 - **Low Utilization of Middle to High Installments**: Installments between 11 and 23 are rarely used, with the number of orders for each falling mostly under 30. This may indicate a lack of interest or awareness of these options, or a potential mismatch with customer purchase behaviors.
 
--- **Very Long-Term Installments Are Least Popular**: Very long-term installment options (over 18 months) are the least utilized, with very few orders choosing these plans.
+- **Very Long-Term Installments Are Least Popular**: Very long-term installment options (over 18 months) are the least utilized, with very few orders choosing these plans.
 
 
 ### Recommendations
