@@ -1,4 +1,4 @@
-# Business Case of E-Commerce
+# Business Case Analysis of E-Commerce
 
 ## Disclaimer
 
