@@ -259,3 +259,136 @@ The analysis of monthly orders by state offers valuable insights into market dyn
 - **Focus on Emerging Markets**: Identify and target potential growth opportunities in states with emerging customer bases. Strategies could include market research to understand local needs, promotional campaigns to raise brand awareness, and exploring partnerships with local businesses to expand reach.
   
 - **Seasonal Promotion Planning**: Capitalize on the observed spikes in order volumes during key shopping seasons by planning targeted sales and marketing efforts well in advance. Ensure inventory levels are adequately managed to meet the anticipated demand.
+
+---
+
+
+## Q3.2: How Are the Customers Distributed Across All the States?
+
+### Query
+
+```sql
+SELECT 
+  customer_state AS state,
+  COUNT(DISTINCT customer_unique_id) AS unique_customers
+FROM `ecom.customers`
+GROUP BY state
+ORDER BY unique_customers DESC
+```
+
+### Screenshot
+
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.008.png)
+
+
+### Insights
+
+This query highlights the distribution of customers across states, revealing key insights into market penetration and geographic preferences:
+
+- **Concentration in Major States**: A significant portion of customers is concentrated in São Paulo (SP), Rio de Janeiro (RJ), and Minas Gerais (MG). These states, being major economic hubs, naturally attract a larger customer base due to higher population density and economic activity.
+  
+- **Diverse Customer Base**: Southern and Southeastern states like Rio Grande do Sul (RS), Paraná (PR), and Santa Catarina (SC) also show a substantial customer presence, indicating a wide-ranging appeal of e-commerce across different regions.
+  
+- **Emerging Markets**: Northern and Northeastern states, including Pará (PA) and Maranhão (MA), alongside traditionally smaller markets like Acre (AC) and Amapá (AP), have fewer customers. These areas represent potential growth opportunities for e-commerce penetration.
+
+### Recommendations
+
+- **Strengthen Presence in High-Density Areas**: Continue to enhance engagement and retention strategies in states with high customer density. Tailored marketing campaigns and superior logistics can help maintain a competitive edge in these regions.
+  
+- **Explore Expansion in Emerging Markets**: Investigate the barriers to e-commerce adoption in states with fewer customers. Initiatives could include localized marketing efforts, partnerships with local businesses, and addressing logistical challenges to improve service delivery.
+  
+- **Tailor Offerings to Regional Preferences**: Analyze customer data to understand regional preferences and tailor product offerings accordingly. This approach can help increase relevance and appeal, driving higher engagement and sales.
+  
+- **Invest in Infrastructure**: For regions showing promising growth, consider investing in infrastructure improvements to support efficient logistics and delivery. This could significantly enhance customer experience and satisfaction, fostering loyalty and repeat business.
+
+---
+
+## Q4.1: Get the % Increase in the Cost of Orders from Year 2017 to 2018 (Include Months Between Jan to Aug Only)
+
+### Query
+
+```sql
+WITH total_payments_2017 AS (
+  SELECT 
+    SUM(payment_value) AS total_2017
+  FROM `ecom.payments` p
+  JOIN `ecom.orders` o ON p.order_id = o.order_id
+  WHERE EXTRACT(YEAR FROM o.order_purchase_timestamp) = 2017
+    AND EXTRACT(MONTH FROM o.order_purchase_timestamp) BETWEEN 1 AND 8
+), 
+total_payments_2018 AS (
+  SELECT 
+    SUM(payment_value) AS total_2018
+  FROM `ecom.payments` p
+  JOIN `ecom.orders` o ON p.order_id = o.order_id
+  WHERE EXTRACT(YEAR FROM o.order_purchase_timestamp) = 2018
+    AND EXTRACT(MONTH FROM o.order_purchase_timestamp) BETWEEN 1 AND 8
+)
+SELECT 
+  total_2017,
+  total_2018,
+  ((total_2018 - total_2017) / total_2017) * 100 AS percentage_increase
+FROM total_payments_2017, total_payments_2018
+```
+
+### Screenshot
+
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.009.png)
+
+
+### Insights
+
+The calculated data shows a significant percentage increase in the cost of orders from 2017 to 2018 for the months January through August, evidencing a robust growth in e-commerce spending. This increase suggests a healthy expansion of the market, possibly driven by an influx of new customers, enhanced buying frequency, or an upsurge in the average order value. The considerable growth rate underscores the e-commerce platform's growing appeal and customer trust, indicating a successful year-over-year business development strategy.
+
+### Recommendations
+
+- **Market Analysis**: Conduct a comprehensive market analysis to identify the drivers behind the significant increase in order costs. Understanding whether the growth is due to new customer acquisition, increased average order value, or expanded product lines can inform future growth strategies.
+  
+- **Customer Engagement**: Strengthen customer engagement and retention strategies. With the evident growth, it's crucial to keep the momentum by enhancing the customer experience, personalizing marketing efforts, and introducing loyalty programs.
+  
+- **Product and Service Diversification**: Explore opportunities for diversifying the product range or adding new services that could cater to the evolving needs and preferences of the growing customer base.
+  
+- **Invest in Technology and Infrastructure**: To sustain growth and manage increased order volumes efficiently, investing in technological enhancements and logistical infrastructure is advisable. This could involve upgrading e-commerce platforms, enhancing data analytics capabilities, and expanding warehouse and fulfillment operations.
+
+
+---
+
+## Q4.2: Calculate the Total & Average Value of Order Price for Each State
+
+### Query
+
+```sql
+SELECT 
+  c.customer_state AS state,
+  SUM(p.payment_value) AS total_order_value,
+  AVG(p.payment_value) AS average_order_value
+FROM `ecom.customers` AS c
+JOIN `ecom.orders` AS o ON c.customer_id = o.customer_id
+JOIN `ecom.payments` AS p ON o.order_id = p.order_id
+GROUP BY state
+ORDER BY total_order_value DESC
+```
+### Screenshot
+
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.010.png)
+
+
+### Insights
+
+The analysis provides a comprehensive overview of customer spending patterns across different states, showcasing:
+
+- **High Spending States**: São Paulo (SP) leads by a significant margin in both total and average order value, underscoring its dominant economic position and consumer market size in Brazil.
+  
+- **Average Order Value Variance**: The data reveals considerable variance in the average order value among states. States like Pará (PA) and Bahia (BA) exhibit higher average order values, suggesting a tendency towards larger transactions, despite having fewer total orders compared to São Paulo.
+  
+- **Economic and Demographic Factors**: The differences in total and average order values across states may reflect varying economic conditions, demographic factors, and consumer preferences, highlighting the importance of a targeted approach in marketing and product offerings.
+
+### Recommendations
+
+- **Customized Marketing and Promotions**: For states with high average order values, consider implementing customized marketing strategies that focus on premium products or bundles that can increase the average transaction size.
+  
+- **Strategic Expansion in Emerging Markets**: Identify states with lower total order values but potential for growth. Tailored marketing campaigns, introduction of new product lines, and improved logistics could drive market penetration and increase order values.
+  
+- **Enhance Customer Experience**: In states with high total order values, focus on enhancing the customer experience through improved website navigation, customer service, and personalized recommendations to encourage repeat business.
+  
+- **Localized Product Offerings**: Adapt product offerings to match the regional tastes and preferences identified through data analysis. This could involve localizing product ranges, descriptions, and marketing messages to resonate with the specific demographic and cultural nuances of each state.
