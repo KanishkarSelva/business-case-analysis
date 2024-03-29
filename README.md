@@ -101,11 +101,12 @@ FROM `ecom.orders`
 GROUP BY order\_year
 
 ORDER BY order\_year
+```
 
 ## Screenshot
 
 ![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.004.png)
-```
+
 
 ## Insights
 
