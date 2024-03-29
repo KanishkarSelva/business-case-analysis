@@ -19,6 +19,11 @@ SELECT column_name, data_type
 FROM `ecom.INFORMATION_SCHEMA.COLUMNS`
 WHERE table_name = 'customers'
 ```
+
+**Screenshot**
+
+![](Images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.001.png)
+
 ## Insights
 - The query reveals the data structure of the customers table, highlighting that it comprises columns with data types of both String and Int64. Understanding the data types is crucial for data integrity and query optimization. For instance, knowing that customer_id is an Int64 assures us it can handle large numeric values efficiently, while customer_name being a String indicates it's designed to store textual data, which is essential for personalization and identification.
 
@@ -37,6 +42,9 @@ WHERE table_name = 'customers'
 SELECT MIN(order_purchase_timestamp) AS earliest_order_time, MAX(order_purchase_timestamp) AS latest_order_time
 FROM `ecom.orders`
 ```
+**Screenshot**
+
+![](Images.Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.002.png)
 
 ## Insights
 - This query identifies the time range within which all orders in the dataset were placed, from the earliest to the latest. Specifically, the orders span from 2016-09-04 21:15:19 UTC to 2018-10-17 17:30:18 UTC. This time frame is critical for understanding the period under analysis, allowing for temporal insights into customer behavior, order volume trends, and seasonal impacts on sales.
