@@ -392,3 +392,356 @@ The analysis provides a comprehensive overview of customer spending patterns acr
 - **Enhance Customer Experience**: In states with high total order values, focus on enhancing the customer experience through improved website navigation, customer service, and personalized recommendations to encourage repeat business.
   
 - **Localized Product Offerings**: Adapt product offerings to match the regional tastes and preferences identified through data analysis. This could involve localizing product ranges, descriptions, and marketing messages to resonate with the specific demographic and cultural nuances of each state.
+
+---
+
+## Q4.3: Calculate the Total & Average Value of Order Freight for Each State
+
+### Query
+
+```sql
+SELECT 
+  c.customer_state AS state,
+  SUM(oi.freight_value) AS total_freight_value,
+  AVG(oi.freight_value) AS average_freight_value
+FROM `ecom.customers` AS c
+JOIN `ecom.orders` AS o ON c.customer_id = o.customer_id
+JOIN `ecom.order_items` AS oi ON o.order_id = oi.order_id
+GROUP BY state
+ORDER BY state
+```
+
+### Screenshot
+
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.011.png)
+
+
+### Insights
+
+This analysis shines a light on the logistics aspect of e-commerce transactions, revealing significant insights into the freight costs associated with delivering orders across various states:
+
+- **Varied Freight Costs**: The data highlights a wide range of average freight values among states. States further from logistics centers or with challenging terrain, such as Acre (AC) and Roraima (RR), tend to have higher average freight costs.
+  
+- **Economies of Scale**: São Paulo (SP), being a major logistical hub, enjoys the lowest average freight costs, benefiting from economies of scale and a dense network of delivery routes that minimize transportation expenses.
+  
+- **Logistical Challenges**: Higher freight costs in certain states may reflect logistical challenges, including longer distances, less efficient transport networks, or lower volumes that prevent leveraging economies of scale.
+
+### Recommendations
+
+- **Optimize Logistics Networks**: For states with high freight costs, explore ways to optimize logistics and distribution networks. This could involve establishing partnerships with local carriers or investing in distribution centers within these regions to reduce delivery distances and costs.
+  
+- **Dynamic Pricing for Freight**: Consider implementing dynamic freight pricing based on real-time logistics data to more accurately reflect the cost of delivery in different states. This approach can help in managing customer expectations and ensuring pricing fairness.
+  
+- **Customer Communication**: Enhance transparency around freight costs with customers, especially in states where these costs are higher. Providing explanations for cost variations can improve customer satisfaction and trust.
+  
+- **Bulk Shipping Options**: Offer customers in states with high freight costs the option for bulk shipping or consolidated orders to reduce the per-item freight cost, encouraging larger purchases and increasing customer value.
+
+---
+
+## Q5.1: Find the No. of Days Taken to Deliver Each Order from the Order’s Purchase Date as Delivery Time. Also, Calculate the Difference (in Days) Between the Estimated & Actual Delivery Date of an Order.
+
+### Query
+
+```sql
+SELECT 
+  order_id,
+  DATE_DIFF(order_delivered_customer_date, order_purchase_timestamp, DAY) AS time_to_deliver,
+  DATE_DIFF(order_delivered_customer_date, order_estimated_delivery_date, DAY) AS diff_estimated_delivery
+FROM `ecom.orders`
+WHERE order_status = 'delivered'
+```
+
+### Screenshots
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.012.png)
+
+
+### Insights
+
+The query provides crucial insights into the efficiency and reliability of the order fulfillment process by measuring delivery times and comparing them against estimated delivery dates:
+
+- **Delivery Performance Variability**: The range of days taken to deliver orders highlights variability in delivery performance. This variability can indicate differences in logistical efficiency, such as the distance to the delivery location, the efficiency of courier services, or the handling time at warehouses.
+  
+- **Estimated vs. Actual Delivery**: The comparison between estimated and actual delivery dates reveals how well the e-commerce platform manages customer expectations regarding delivery times. Orders delivered earlier than estimated can enhance customer satisfaction, while delays beyond the estimated delivery date may negatively impact customer trust and satisfaction.
+
+### Recommendations
+
+- **Logistics Optimization**: Identify factors contributing to delivery delays or inefficiencies and address them through logistics optimization, such as route planning, better courier partnerships, or improved warehouse operations.
+  
+- **Enhance Estimation Accuracy**: Improve the accuracy of delivery date estimations by incorporating real-time data and predictive analytics. More accurate estimations can help manage customer expectations and reduce dissatisfaction due to unexpected delays.
+  
+- **Customer Communication**: Implement proactive communication strategies to inform customers about the status of their orders, especially if delays are anticipated. Offering compensation or apologies for significant delays can help maintain customer trust.
+  
+- **Feedback Loop**: Establish a feedback loop with customers to gather insights on their delivery experience. Use this feedback to refine delivery processes, estimation algorithms, and customer service practices.
+
+---
+
+
+## Q5.2: Find out the Top 5 States with the Highest & Lowest Average Freight Value.
+
+### Query
+
+```sql
+WITH StateFreight AS (
+  SELECT 
+    c.customer_state AS state,
+    AVG(oi.freight_value) AS average_freight_value
+  FROM `ecom.customers` AS c
+  JOIN `ecom.orders` AS o ON c.customer_id = o.customer_id
+  JOIN `ecom.order_items` AS oi ON o.order_id = oi.order_id
+  GROUP BY state
+)
+
+SELECT * FROM (
+  SELECT 
+    state,
+    average_freight_value
+  FROM StateFreight
+  ORDER BY average_freight_value DESC
+  LIMIT 5
+) 
+
+UNION ALL
+
+SELECT * FROM (
+  SELECT 
+    state,
+    average_freight_value
+  FROM StateFreight
+  ORDER BY average_freight_value ASC
+  LIMIT 5
+)
+```
+
+
+### Screenshot
+
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.013.png)
+
+
+### Insights
+
+This analysis uncovers the disparities in average freight values across states, providing a lens through which to view logistical efficiency and cost-effectiveness:
+
+- **Geographical and Logistical Challenges**: The states with the highest average freight values often face geographical and logistical challenges that contribute to higher delivery costs. These challenges may include longer distances from distribution centers, difficult terrain, or less developed transportation infrastructure.
+  
+- **Economies of Scale in Major States**: Conversely, states with the lowest average freight values, particularly those with large urban centers and better logistics infrastructure, benefit from economies of scale. These states can distribute costs over a larger number of orders, reducing the average freight value per order.
+  
+- **Influence of State Policies**: Variations in average freight values may also reflect differences in state policies, taxes, and regulations that affect transportation and logistics costs.
+
+### Recommendations
+
+- **Targeted Logistics Improvements**: Focus on logistical improvements in states with high average freight values to enhance cost efficiency. This may involve negotiating better rates with carriers, optimizing delivery routes, or investing in local logistics hubs to reduce transit distances.
+  
+- **Dynamic Freight Pricing**: Consider implementing dynamic freight pricing models that account for the specific challenges and costs associated with delivery to different states. Such models can help in setting fair prices for customers while covering logistical costs.
+  
+- **Customer Education**: Educate customers about the factors influencing freight costs. Transparency about why freight charges vary by state can improve customer understanding and acceptance of these costs.
+  
+- **Explore Alternative Delivery Options**: Investigate alternative delivery methods that could offer cost savings in high-freight states. This might include partnering with local delivery services or utilizing new technologies like drones for last-mile deliveries in hard-to-reach areas.
+
+---
+
+## Q5.3: Find Out the Top 5 States with the Highest & Lowest Average Delivery Time.
+
+### Query
+
+```sql
+WITH DeliveryTime AS (
+  SELECT 
+    c.customer_state AS state,
+    AVG(TIMESTAMP_DIFF(o.order_delivered_customer_date, o.order_purchase_timestamp, DAY)) AS average_delivery_days
+  FROM `ecom.orders` o
+  JOIN `ecom.customers` c ON o.customer_id = c.customer_id
+  WHERE o.order_delivered_customer_date IS NOT NULL
+  GROUP BY c.customer_state
+)
+
+SELECT state, average_delivery_days
+FROM DeliveryTime
+ORDER BY average_delivery_days DESC
+LIMIT 5
+
+UNION ALL
+
+SELECT state, average_delivery_days
+FROM DeliveryTime
+ORDER BY average_delivery_days ASC
+LIMIT 5
+```
+## ScreenShots (Highest, Lowest respectively)
+
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.014.png)
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.015.png)
+
+
+### Insights
+
+The query elucidates on the delivery efficiency across states, distinguishing between those with the quickest and slowest delivery times:
+
+- **Variability in Delivery Efficiency**: The states with the longest average delivery times often face challenges such as remote locations, less developed logistics networks, or other inefficiencies that prolong delivery.
+  
+- **Quick Delivery in Urban Centers**: States with the shortest delivery times usually benefit from robust logistics infrastructure and closer proximity to distribution centers, facilitating faster order fulfillment.
+  
+- **Impact on Customer Satisfaction**: Delivery time is a crucial factor in customer satisfaction. States with longer delivery times may see lower satisfaction levels, highlighting the need for targeted improvements.
+
+### Recommendations
+
+- **Enhance Logistics Infrastructure**: For states experiencing slow delivery times, focus on enhancing the logistics infrastructure by investing in technology, optimizing routes, and partnering with local carriers to improve speed and efficiency.
+  
+- **Customer Communication**: In states with longer delivery times, maintain transparent communication with customers about expected delivery schedules and provide regular updates on order status to manage expectations.
+  
+- **Regional Distribution Centers**: Consider establishing or partnering with regional distribution centers in or near states with slow delivery times to shorten the distance to customers and expedite deliveries.
+  
+- **Analyze Delivery Processes**: Conduct thorough analyses of delivery processes in both the fastest and slowest states to identify best practices and areas for improvement. Implementing successful strategies from faster states may help reduce delivery times elsewhere.
+
+
+---
+
+## Q5.4: Find Out the Top 5 States Where the Order Delivery Is Really Fast as Compared to the Estimated Date of Delivery.
+
+### Query
+
+```sql
+WITH DeliverySpeed AS (
+  SELECT 
+    c.customer_state AS state,
+    AVG(TIMESTAMP_DIFF(o.order_delivered_customer_date, o.order_estimated_delivery_date, DAY)) AS avg_days_early
+  FROM `ecom.orders` o
+  JOIN `ecom.customers` c ON o.customer_id = c.customer_id
+  WHERE o.order_status = 'delivered' 
+    AND o.order_delivered_customer_date IS NOT NULL 
+    AND o.order_estimated_delivery_date IS NOT NULL
+  GROUP BY c.customer_state
+)
+
+SELECT state, avg_days_early
+FROM DeliverySpeed
+WHERE avg_days_early < 0
+ORDER BY avg_days_early
+LIMIT 5;
+```
+### ScreenShot
+
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.016.png)## 
+
+
+### Insights
+
+This analysis identifies states where deliveries are consistently made before the estimated delivery dates, offering an optimistic view of logistics performance:
+
+- **Efficiency and Customer Satisfaction**: States that frequently experience early deliveries exemplify logistical efficiency and contribute positively to customer satisfaction. Early delivery can enhance the customer's shopping experience and trust in the e-commerce platform.
+  
+- **Logistical Strategies and Infrastructure**: The success in these states could be attributed to effective logistical strategies, superior infrastructure, or a combination of both. It might also indicate conservative estimation of delivery times.
+  
+- **Geographical Advantages**: Certain states may benefit from geographical advantages that facilitate faster delivery, such as proximity to distribution centers or a well-developed transportation network.
+
+### Recommendations
+
+- **Review and Adjust Delivery Estimates**: For states achieving early deliveries, review the estimation process to ensure that delivery times are accurately predicted. Adjusting estimates to be more realistic can help set proper customer expectations across all states.
+  
+- **Replicate Successful Logistics Practices**: Identify and analyze the logistics practices contributing to early deliveries in these top-performing states. Consider replicating these practices in states struggling to meet estimated delivery times.
+  
+- **Enhance Transparency with Customers**: Maintain transparency about how delivery estimates are calculated and the likelihood of early delivery. This information can help manage customer expectations and improve satisfaction.
+  
+- **Continuous Improvement**: Use the data from these states as a benchmark for continuous improvement in delivery operations. Aim to reduce delivery times while maintaining or improving accuracy in delivery estimates across the board.
+
+---
+
+## Q6.1: Find the Month on Month No. of Orders Placed Using Different Payment Types.
+
+### Query
+
+```sql
+SELECT
+  EXTRACT(YEAR FROM o.order_purchase_timestamp) AS order_year,
+  EXTRACT(MONTH FROM o.order_purchase_timestamp) AS order_month,
+  p.payment_type,
+  COUNT(DISTINCT o.order_id) AS number_of_orders
+FROM
+  `ecom.orders` o
+JOIN
+  `ecom.payments` p ON o.order_id = p.order_id
+WHERE
+  o.order_status = 'delivered'
+GROUP BY
+  order_year, order_month, p.payment_type
+ORDER BY
+  order_year, order_month, p.payment_type;
+```
+
+### Screenshot
+
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.017.png)
+
+
+### Insights
+
+The query uncovers trends in payment method preferences over time, highlighting how customers choose to pay for their orders:
+
+- **Dominance of Certain Payment Types**: Credit card payments emerge as the predominant choice among customers, consistently accounting for the majority of transactions. This preference indicates trust in credit card security and the benefits they offer, such as rewards or cashback.
+  
+- **Growth in Digital Payment Options**: An increase in the use of digital payment options, such as UPI (Unified Payments Interface), reflects a shift towards mobile and online banking solutions. This trend may be driven by the convenience and speed of these payment methods.
+  
+- **Seasonal Variations in Payment Preferences**: Payment method usage may exhibit seasonal variations, with certain payment types becoming more popular during holiday seasons or sales events, likely due to promotional incentives.
+
+### Recommendations
+
+- **Promote Diverse Payment Options**: To accommodate varying customer preferences, ensure a wide range of payment options are available and prominently displayed at checkout.
+  
+- **Leverage Popular Payment Methods for Promotions**: Given the popularity of credit cards, consider partnering with banks or credit card companies for exclusive promotions or discounts, encouraging more customers to use this payment method.
+  
+- **Enhance Digital Payment Infrastructure**: Invest in the security and usability of digital payment options to support their growing popularity. Ensuring a seamless and secure transaction process can further increase customer confidence in these methods.
+  
+- **Monitor and Adapt to Payment Trends**: Continuously analyze payment method data to identify emerging trends. Use this information to adjust marketing strategies, potentially introducing incentives for underutilized payment methods to diversify payment portfolios.
+
+
+---
+
+## Q6.2: Find the No. of Orders Placed on the Basis of the Payment Installments that Have Been Paid.
+
+### Query
+
+```sql
+SELECT
+  p.payment_installments,
+  COUNT(DISTINCT o.order_id) AS number_of_orders
+FROM
+  `ecom.payments` p
+JOIN
+  `ecom.orders` o ON p.order_id = o.order_id
+WHERE
+  o.order_status = 'delivered'
+GROUP BY
+  p.payment_installments
+ORDER BY
+  p.payment_installments;
+```
+
+
+### ScreenShot## 
+
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.018.bmp)
+
+
+### Insights
+
+This examination into the use of payment installments for e-commerce purchases reveals several important trends regarding consumer finance behaviors and the accessibility of products:
+
+- **Preference for Fewer Installments**: The majority of orders are paid for with just one installment, indicating that customers prefer to pay in full at the time of purchase. This is shown by the highest number of orders, 47,586, being in this category.
+Decline as Installments Increase: There is a clear decline in the number of orders as the number of installments increases. After the one-time payments, the next most popular installment option is 2 installments (12,052 orders), followed by 3 installments (10,147 orders).
+
+- **Some Large Installment Plans**: Notably, there are spikes at higher installment numbers such as 8 and 10, which suggests that for larger purchases, customers prefer these specific installment plans.
+
+- **Low Utilization of Middle to High Installments**: Installments between 11 and 23 are rarely used, with the number of orders for each falling mostly under 30. This may indicate a lack of interest or awareness of these options, or a potential mismatch with customer purchase behaviors.
+
+-- **Very Long-Term Installments Are Least Popular**: Very long-term installment options (over 18 months) are the least utilized, with very few orders choosing these plans.
+
+
+### Recommendations
+
+- **Flexible Payment Solutions**: Continue to offer flexible payment installment options to cater to the diverse financial needs of customers. This could include promoting low-installment plans for affordability or high-installment plans for more expensive items.
+  
+- **Educate Customers on Installment Benefits**: Increase efforts to educate customers on the benefits and terms of installment payments. Clear, transparent information can help demystify installment plans, potentially making them more appealing to customers who are hesitant to use them.
+  
+- **Analyze Installment Plan Usage**: Conduct detailed analyses on the usage of different installment plans to understand consumer preferences better. This data can inform future financial product offerings or adjustments to existing plans.
+  
+- **Promotional Campaigns**: Consider promotional campaigns that highlight the advantages of using installment payments, especially for high-ticket items. Special offers, such as reduced interest rates or installment fee waivers, could incentivize the use of higher installment plans for significant purchases.
