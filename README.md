@@ -85,22 +85,17 @@ ORDER BY number_of_customers DESC
 - Infrastructure Investments: For areas with significant customer activity, consider investing in infrastructure, such as warehouses or distribution centers, to improve delivery times and reduce shipping costs.
 ---
 
-## 2.1.Is there a growing trend in the no. of orders placed over the past years?
+## Q2.1: Is There a Growing Trend in the No. of Orders Placed Over the Past Years?
 
-## Query
+### Query
 
 ```sql
 SELECT 
-
-`  `EXTRACT(YEAR FROM order\_purchase\_timestamp) AS order\_year,
-
-`  `COUNT(order\_id) AS total\_orders
-
+  EXTRACT(YEAR FROM order_purchase_timestamp) AS order_year, 
+  COUNT(order_id) AS total_orders
 FROM `ecom.orders`
-
-GROUP BY order\_year
-
-ORDER BY order\_year
+GROUP BY order_year
+ORDER BY order_year
 ```
 
 ## Screenshot
@@ -133,6 +128,49 @@ From this above image we can understand that the number of order placed over pas
 
 - Customer Experience Focus: With the increase in order volume, maintain a focus on customer service quality. Growth should not come at the expense of customer satisfaction.
 
+---
+
+## Q2.2: Can We See Some Kind of Monthly Seasonality in Terms of the No. of Orders Being Placed?
+
+### Query
+
+```sql
+SELECT 
+  EXTRACT(YEAR FROM order_purchase_timestamp) AS order_year, 
+  EXTRACT(MONTH FROM order_purchase_timestamp) AS order_month, 
+  COUNT(order_id) AS monthly_orders
+FROM `ecom.orders`
+GROUP BY order_year, order_month
+ORDER BY order_year, order_month
+
+```
+ ## Screenshot
+
+![](images/Aspose.Words.f392bb6f-7625-4882-87a6-4dc91ee39796.005.png)
 
 
+## Insights:
 
+- Initial Growth: Starting with just a few orders in September 2016, there is a rapid increase in the number of orders placed, reaching a peak in November 2017 with 7544 orders. This growth could be associated with an increased market presence, marketing campaigns, seasonal sales, or expanding product lines.
+
+- Year-End Peak: There is a notable peak towards the end of each year, especially in November and December, which could be attributed to holiday shopping for events like Black Friday, Cyber Monday, and Christmas.
+
+- Start of the Year Momentum: The momentum continues into the new year, with January 2018 also showing a high number of orders. This may reflect New Year promotions or gift card redemptions following the holiday season.
+
+- Mid-Year Plateau: From February to August, the monthly orders seem to stabilize with a slight uptrend in 2018 compared to the corresponding months in 2017, suggesting steady demand and possibly effective customer retention strategies.
+
+- Sharp Drop:  There is a significant drop in September 2018, which deviates from the previous trend and continues to remain very low into October 2018. This is an anomaly that needs to be investigated.
+
+## Recommendation:
+
+- Investigate Anomalies: Look into the sharp decline in orders in September and October 2018 to understand whether it was due to external factors, operational issues, changes in consumer behavior, or data recording errors.
+
+- Capitalize on Peak Seasons: Strengthen inventory and marketing strategies around the November-December period to maximize sales during the peak shopping season.
+
+- Engagement During Off-Peak Months: Develop promotions and marketing initiatives to boost orders during traditionally lower-performing months, from February to August.
+
+- Customer Behavior Analysis: Conduct customer surveys or market research to understand the factors driving seasonality, which may include looking at economic trends, competitor activity, and changing consumer preferences.
+
+- Long-Term Data Tracking: Continue to collect and analyze data beyond October 2018 to confirm these seasonal trends and adjust strategies accordingly.
+
+---
