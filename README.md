@@ -1,4 +1,4 @@
-# Business Case Analysis of E-Commerce
+# Business Case Analysis of Biggest General Merchandise Retailer In US
 
 ## Disclaimer
 
