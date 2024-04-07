@@ -24,7 +24,7 @@
    - Analyzed customer order patterns across different times of the day.
    - Recommendations included promotions during peak hours, enhancing customer support, targeted marketing, optimizing for mobile shopping, and experimenting with early offers.
 
-7. ** Monthly Orders by State:**
+7. **Monthly Orders by State:**
    - Identified growth trends, seasonal peaks, and regional variances in order volumes across states.
    - Recommendations included localized marketing strategies, infrastructure optimization, focus on emerging markets, and seasonal promotion planning.
 
