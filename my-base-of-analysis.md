@@ -1,4 +1,4 @@
-# My Style of Analysis
+# My Base of Analysis
 
 1. **Data Type and Query Optimization Analysis**:
    - Identified the data types within the customer table (String and Int64).
